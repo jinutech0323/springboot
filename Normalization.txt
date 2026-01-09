@@ -1,0 +1,141 @@
+What is Normalization? (In simple words)
+
+Normalization = Organizing data properly to avoid problems
+
+Problems it solves:
+Duplicate data 
+Data inconsistency 
+Update problems 
+Confusion 
+
+Real-Life Situation (Before Normalization)
+Imagine a college system where you store everything in ONE table.
+| student_id | student_name | course_name | course_fee | address        |
+| ---------- | ------------ | ----------- | ---------- | -------------- |
+| 1          | Ravi         | Java        | 30000      | Chennai, TN    |
+| 2          | Ravi         | Python      | 25000      | Chennai, TN    |
+| 3          | Anu          | Java        | 30000      | Coimbatore, TN |
+
+Problems here:
+Ravi’s name & address repeated
+Java course fee repeated multiple times
+If Java fee changes → update many rows ❌
+If Ravi changes address → update many rows ❌
+This table is UNNORMALIZED
+----------------------------------------------------------------------------------
+
+First Normal Form (1NF)
+Rule of 1NF:
+
+✔ No multiple values in one column
+✔ Each column contains atomic (single) value
+1NF Table
+Fix:
+Address should not be mixed like Chennai, TN
+
+| student_id | student_name | course_name | course_fee | city       | state |
+| ---------- | ------------ | ----------- | ---------- | ---------- | ----- |
+| 1          | Ravi         | Java        | 30000      | Chennai    | TN    |
+| 2          | Ravi         | Python      | 25000      | Chennai    | TN    |
+| 3          | Anu          | Java        | 30000      | Coimbatore | TN    |
+
+Now:
+Each column has single value
+Still duplicates exist → move to 2NF
+
+=======================================================================================
+Rule of 2NF:
+
+✔ Must be in 1NF
+✔ No partial dependency
+
+What is partial dependency?
+Non-key column depends on only part of primary key
+assume
+Primary key = (student_id, course_name)
+
+Problem:
+student_name, city, state depend only on student_id
+course_fee depends only on course_name
+
+So we split tables.
+student table
+
+| student_id | student_name | city       | state |
+| ---------- | ------------ | ---------- | ----- |
+| 1          | Ravi         | Chennai    | TN    |
+| 3          | Anu          | Coimbatore | TN    |
+
+course table
+| course_id | course_name | course_fee |
+| --------- | ----------- | ---------- |
+| 101       | Java        | 30000      |
+| 102       | Python      | 25000      |
+
+enrollment table(connection)
+| student_id | course_id |
+| ---------- | --------- |
+| 1          | 101       |
+| 1          | 102       |
+| 3          | 101       |
+
+Now:
+
+Student data stored once
+Course data stored once
+Relationship maintained properly
+Still one issue → move to 3NF
+--------------------------------------------------------------------------------------
+
+Third Normal Form (3NF)
+Rule of 3NF:
+
+✔ Must be in 2NF
+✔ No transitive dependency
+
+Transitive dependency means:
+A column depends on another non-key column
+
+Problem:
+city → state
+State depends on city, not directly on student_id
+
+Fix: Separate Address table
+address table
+| address_id | city       | state |
+| ---------- | ---------- | ----- |
+| 1          | Chennai    | TN    |
+| 2          | Coimbatore | TN    |
+updated student table
+| student_id | student_name | address_id |
+| ---------- | ------------ | ---------- |
+| 1          | Ravi         | 1          |
+| 3          | Anu          | 2          |
+
+--------------------------------------------------------------------------
+Final Normalized Design (Perfect 3NF)
+
+✅ Student Table
+✅ Course Table
+✅ Address Table
+✅ Enrollment Table
+
+Benefits:
+
+✔ No duplication
+✔ Easy updates
+✔ Clean structure
+✔ Real-world mapping
+✔ Used in real databases & Spring Boot
+
+One-Line Memory Trick (Very Important)
+
+1NF → Atomic values
+
+2NF → Remove partial dependency
+
+3NF → Remove transitive dependency
+
+
+
+

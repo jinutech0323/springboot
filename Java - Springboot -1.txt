@@ -1,0 +1,86 @@
+Java - Springboot
+
+frameworks
+python -> django
+java -> springboot  (widely used and it both frontend and backend) (web app and API)
+js -> Express JS and Node JS
+
+features
+1.Auto configuration
+2.Logging
+3.Admin features
+4.Testing
+5.security 
+
+lines code is simple in springboot 
+
+HTTP -> Protocol 
+
+getting a data from a internet 
+
+ (URL - uniform resource locator)
+syntax
+
+protocol://domainName/path?path-parameters
+
+http://www.flipkart.com/phone?vivo
+
+https://www.flipkart.com/search?sid=tyy%2C4io&otracker=CLP_Filters&p%5B%5D=facets.brand%255B%255D%3Dvivo
+
+protocol -> Set of rules to allow electronics devices to communicate
+(http,https,web sockets)
+
+HTTP -> Hyper text transfer protocol
+                                 
+			        HTTP request
+		Client --------------------------> Server  (Id,newpass)
+          		  <-------------------------
+				HTTP response
+
+HTTPS -> Hyper text transfer protocol Secure
+
+domainName -> Indicates which web server is being requested
+
+path -> Resource on the server
+
+path-parameters -> add some criteria to the request
+
+https://www.flipkart.com/watch?type=digital&rating>4
+
+HTTP Request : Message from client to server
+
+Http request -> Start line -> URL 
+					    -> HTTP Methods -> GET,POST,PUT,DELETE 
+					    -> HTTP Version -> 
+                       ->Headers -> additional information to the server 
+		       ->Body  -> will send data to server 
+
+GET -> Fetching a data from the server (Reading)
+POST -> Creating the data in the Server (Create)
+PUT -> Updating the data (Update) 
+DELETE -> Delete the data from server (Delete)
+
+HTTP Response : Message from server to client 
+
+Http response -> Status line -> HTTP Version 
+						 -> Status Code 
+						 -> Status text
+			 -> Headers -> information
+			 ->Body -> data
+
+Status code
+
+1. 1XX -> 100 -> 199  -> Informational 
+2. 2XX -> Success 
+3. 3XX -> Redirectional (305)
+4. 4XX -> Client error (404,405)
+5. 5XX -> Server error 
+
+XML -> HTML + JS
+JSON -> JavaScript object Notation
+
+
+
+
+
+

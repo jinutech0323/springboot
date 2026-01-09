@@ -1,0 +1,224 @@
+✅ RULE 1 — Client Must Always Start the Communication
+
+Meaning:
+A server will never start talking on its own.
+The client (mobile/web app) must send the first request.
+
+Example:
+Your Swiggy app sends a request:
+“Show restaurant list.”
+The server responds only after the app asks.
+
+✅ RULE 2 — Every HTTP Communication Has 2 Parts
+
+Client Request
+
+Server Response
+
+Example:
+
+Request → “GET /restaurants”
+
+Response → “Here is the list of restaurants”
+
+Always 2 parts.
+
+✅ RULE 3 — HTTP Follows a Fixed Request Structure
+
+A request must contain:
+
+Request Line → GET /products
+
+Headers → Content-Type, Authorization
+
+Body → JSON data (only for POST/PUT)
+
+Example:
+When you login to Amazon:
+
+POST /login
+Content-Type: application/json
+
+{
+  "email": "jinu@gmail.com",
+  "password": "123456"
+}
+
+✅ RULE 4 — The Server Must Send a Status Code in Every Response
+
+Examples:
+
+200 OK
+
+404 Not Found
+
+500 Server Error
+
+401 Unauthorized
+
+Example:
+You enter wrong password on Instagram → Server sends 401 Unauthorized.
+
+✅ RULE 5 — HTTP Uses Standard Methods
+
+Common methods:
+
+GET
+
+POST
+
+PUT
+
+DELETE
+etc.
+
+Example:
+Ola app:
+
+GET → Fetch nearby cabs
+
+POST → Book a cab
+
+DELETE → Cancel a ride
+
+✅ RULE 6 — URLs Must Identify What You Want
+
+The URL should clearly tell the server what resource you need.
+
+Example:
+Amazon product:
+
+/products/12345
+
+
+This clearly identifies product with ID 12345.
+
+✅ RULE 7 — HTTP Is Stateless
+
+Each request is treated independently.
+Server does not remember previous requests.
+
+Example:
+When you browse Flipkart, each page request is separate.
+Flipkart doesn’t know who you are unless you send the session token each time.
+
+✅ RULE 8 — Everything Must Be in Text Format
+
+Headers, status codes, methods, URLs → all are text.
+
+Example:
+
+GET /cart
+Host: flipkart.com
+
+
+All text. Easy to debug and readable.
+
+✅ RULE 9 — The Client Must Specify Data Type
+
+Client must say what type of data it is sending.
+
+Example:
+Swiggy login:
+
+Content-Type: application/json
+
+
+It tells the server:
+“Data is in JSON format.”
+
+✅ RULE 10 — HTTP Response Must Follow Structure
+
+A response must contain:
+
+Status Line → 200 OK
+
+Headers → Content-Type
+
+Body → Data
+
+Example:
+
+200 OK
+Content-Type: application/json
+
+{
+  "restaurants": [...]
+}
+
+✅ RULE 11 — Use of HTTP Versions
+
+Common versions:
+
+HTTP/1.1
+
+HTTP/2
+
+HTTP/3
+
+Example:
+When you stream YouTube videos, modern browsers use HTTP/3 for faster delivery.
+
+✅ RULE 12 — Communication Must Follow ASCII Text Encoding
+
+All HTTP messages (headers, status lines) follow ASCII encoding (English readable characters).
+
+Example:
+Even if you request:
+
+/movie/தலபதி
+
+
+Internally it is converted to ASCII-safe encoded text.
+
+✅ RULE 13 — HTTP Can Work Over Any Media Layer
+
+HTTP can run over:
+
+WiFi
+
+Mobile data
+
+Broadband
+
+Satellite internet
+
+LAN
+Any medium that carries packets.
+
+Example:
+You can browse Amazon on:
+
+WiFi at home
+
+Mobile hotspot
+
+Office network
+HTTP works everywhere.
+
+✅ RULE 14 — HTTP Does Not Care About the Device
+
+HTTP does not care if you are using:
+
+Mobile
+
+Laptop
+
+Smart TV
+
+Tablet
+
+Car infotainment system
+
+Example:
+Amazon.com works the same:
+
+On Android
+
+On iPhone
+
+On laptop
+
+On Smart TV browser
+
+Same rules, same request, same response.

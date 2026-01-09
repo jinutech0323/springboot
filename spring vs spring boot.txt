@@ -1,0 +1,101 @@
+spring vs spring boot
+java backend framework
+spring oda upgraded version tha sb
+ each and everything will be handled by          developers
+
+predefined vachi pandrathu sb
+
+framework
+predefined code irukum
+certain rules and code for using the predefined code
+
+dependencies->in spring we manually add and create
+
+in sb starter nu dependency iruku automatically dependencies add agum
+
+spring la server ->tomcat u should create
+but in sb
+mvn spring-boot :run
+
+spring la lot code line
+but spring boot la kamia irukum
+
+micro service -> different languages
+ellathukudaium merge agum
+sb la support agunm but in spring la kastam
+
+
+spring na war file ->web appli archive file->zip file
+multiple file
+class file
+compile class file irukum
+we need to create manually
+
+spring boot na war and jar file -> java archieve file
+
+compare with servlet we can have addition info
+
+spring example word file
+spring boot canva irukum atha use pannuna pothum
+
+
+maven install
+
+local la sb project
+spring initializr
+maven -> java
+group na package project create agum no change
+name proj name while creating name package name also changes
+jar war difference we use jar
+properties
+17or21 java
+dependencies thevayana incredents
+   spring web -> if u add any other u should write code
+create tomcat
+generate
+download
+project file
+path vs code open
+main la work agum
+demo package la the use panva
+file inside demo
+new.java
+inside target we can get jar file
+
+
+
+
+annotation
+
+sb layers
+entity -> folder used to define table
+repository -> interface for db operation(inbuild fun)
+service or Implementation -> business logic
+controller -> REST endpoints handle http request
+           ella request varum
+dto -> data transfer object -> short name of entity->send required data
+exception -> custom exception
+config -> swagger eluthurathuku
+security -> namma create poandra methids yaru access panvanganu eluthurathu
+ithu controller la eluthuvoem
+
+
+IoC 
+inversion of control
+
+dependencies injection
+oruthanuku onnu venumna athu dependancies atha kudukurathu injection
+
+setter injection
+field injection  -> annotation @Autowired
+constructor injection
+
+auto wired
+get vachi hello world print pandrathu
+
+vs code
+
+
+@Restcontroller
+@GetMapping("/path")
+

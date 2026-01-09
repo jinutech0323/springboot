@@ -1,0 +1,348 @@
+MySQL is an open-source Relational Database Management System (RDBMS).
+
+It is used to store, manage, and retrieve data in a structured (table) format using SQL.
+
+🔹 Simple Definition
+
+MySQL is a relational database that stores data in tables and allows data access using SQL queries.
+
+🔹 What MySQL Does
+
+Stores application data
+
+Organizes data into tables (rows & columns)
+
+Maintains relationships between tables
+
+Ensures data integrity
+
+MySQL with Java / Spring Boot
+
+MySQL works with:
+
+JDBC → direct SQL
+
+Hibernate / JPA → ORM
+
+Spring Data JPA → repository based access
+
+
+MySQL is used in Spring Boot to store application data and support CRUD operations through JPA/Hibernate or JDBC.
+
+Role of MySQL in Spring Boot Architecture
+Client (Browser / Postman)
+        ↓
+Controller (REST API)
+        ↓
+Service (Business Logic)
+        ↓
+Repository (JPA / JDBC)
+        ↓
+MySQL Database
+
+
+-------------------------------------------------------------------------------------------
+
+with Hibernate
+
+How Data is Handled
+
+You work with Java objects
+
+Hibernate:
+
+Converts objects → SQL
+
+Executes SQL
+
+Converts result → objects
+
+without hibernate
+
+How Data is Handled
+
+You write SQL manually
+
+You manage:
+
+Queries
+
+Mapping
+
+Errors
+
+---------------------------------------------------------------------------------------------------
+
+Hibernate is an ORM (Object Relational Mapping) framework for Java.
+
+It implements JPA and allows Java objects to be stored, retrieved, updated, and deleted from a database automatically.
+
+🔹 Simple Definition
+
+Hibernate is a Java framework that maps Java classes to database tables and removes the need to write SQL manually.
+
+🔹 Why Hibernate is Used
+
+Without Hibernate (JDBC):
+
+You write SQL queries
+
+You manage connections
+
+You convert ResultSet → objects
+
+With Hibernate:
+
+Work with Java objects
+
+Hibernate generates SQL
+
+Handles DB connection automatically
+
+🔹 Hibernate in Spring Boot
+
+Spring Boot uses Hibernate as the default JPA implementation
+
+When you use Spring Data JPA, Hibernate runs in the background
+
+🔹 How Hibernate Works (Flow)
+
+Java Entity class is created
+
+Hibernate maps entity → table
+
+Hibernate generates SQL
+
+Executes SQL on database
+
+Converts DB rows → Java objects
+
+
+JDBC stands for Java Database Connectivity.
+
+It is a Java API used to connect Java applications with relational databases and execute SQL queries.
+
+🔹 Simple Definition
+
+JDBC is a Java API that allows Java programs to interact with databases using SQL.
+
+🔹 Why JDBC is Needed
+
+Java programs cannot directly talk to databases.
+JDBC acts as a bridge between Java and the database.
+
+
+JDBC Steps (Important)
+
+Load JDBC Driver
+
+Create Connection
+
+Create Statement
+
+Execute SQL
+
+Process Result
+
+Close Connection
+
+
+JDBC vs Hibernate (Working Comparison)
+Feature	JDBC	Hibernate
+Level	Low-level	High-level
+SQL	Manual	Auto-generated
+Mapping	Manual	Automatic (ORM)
+Connection	Manual	Managed
+Code	More	Less
+Learning	Easy	Medium
+Performance	High	Slightly lower
+
+---------------------------------------------------------------------------------------------------
+
+Application Name
+spring.application.name=demo
+
+
+Sets the name of your Spring Boot application.
+
+Used in:
+
+Logging
+
+Spring Cloud services
+
+Monitoring tools
+
+Here, the application name is demo.
+
+2️⃣ Server Port Configuration
+# Don't change the port
+server.port = 9001
+
+
+Tells Spring Boot to run the embedded server (Tomcat) on port 9001.
+
+Default port is 8080, but you changed it to 9001.
+
+Your application will be accessible at:
+
+http://localhost:9001
+
+3️⃣ Forward Headers Strategy (HTTPS Support)
+# for https
+server.forward-headers-strategy=framework 
+
+
+Used when your application is behind a proxy or load balancer (like Nginx).
+
+Helps Spring understand:
+
+Original protocol (HTTP / HTTPS)
+
+Original client IP
+
+framework → Spring handles forwarded headers properly.
+
+👉 Important for:
+
+HTTPS redirection
+
+Security
+
+Correct URL generation
+
+4️⃣ Database Connection (MySQL)
+spring.datasource.url=jdbc:mysql://localhost:3306/transport_pro?createDatabaseIfNotExist=true
+
+
+JDBC URL to connect to MySQL database.
+
+transport_pro → database name.
+
+createDatabaseIfNotExist=true
+
+Automatically creates the database if it does not exist.
+
+spring.datasource.username=root
+spring.datasource.password=Amypo
+
+
+MySQL login credentials.
+
+Username: root
+
+Password: Amypo
+
+⚠️ In real projects, passwords should be stored securely (not hard-coded).
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+
+Specifies the MySQL JDBC Driver.
+
+Required for connecting Java + Spring Boot to MySQL.
+
+cj → MySQL Connector/J (new versions).
+
+5️⃣ JPA & Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+
+
+Controls how Hibernate handles database tables.
+
+update means:
+
+Automatically creates or updates tables
+
+Does NOT delete existing data
+
+Other options:
+
+create → recreates tables every run
+
+create-drop → drops tables when app stops
+
+validate → only checks schema
+
+none → no action
+
+spring.jpa.show-sql=true
+
+
+Prints SQL queries in the console.
+
+Helpful for debugging and learning.
+
+spring.jpa.properties.hibernate.format_sql=true
+
+
+Formats SQL queries in a readable style.
+
+Makes logs cleaner and easier to understand.
+
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+
+
+Tells Hibernate:
+
+Which database type you are using
+
+So it can generate correct SQL syntax
+
+Here → MySQL 8
+
+----------------------------------------------------------------------------------------------------------
+
+DDL stands for Data Definition Language.
+
+It is a set of SQL commands used to define, create, modify, or delete database structures
+
+What DDL Controls
+
+DDL works on database schema, such as:
+
+Databases
+
+Tables
+
+Columns
+
+Constraints
+
+Indexes
+
+👉 It does NOT insert or update records — that is handled by DML.
+
+🔹 Common DDL Commands
+Command	Purpose
+CREATE	Create database / table
+ALTER	Modify table structure
+DROP	Delete table or database
+TRUNCATE	Remove all records (structure remains)
+RENAME	Rename table
+
+JPA stands for Java Persistence API.
+
+It is a Java specification used to store, retrieve, and manage data between Java objects and a relational database.
+
+JPA is a standard way in Java to map Java objects to database tables and perform database operations without writing SQL manually.
+
+Why JPA is Needed
+
+Without JPA:
+
+You write JDBC code
+
+You manually write SQL
+
+You handle connections, result sets, and errors
+
+With JPA:
+
+You work with Java objects
+
+JPA automatically handles SQL
+
+Less code, cleaner logic
+
+

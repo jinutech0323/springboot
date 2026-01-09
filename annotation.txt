@@ -1,0 +1,418 @@
+annotation
+
+sb layers
+entity -> folder used to define table
+repository -> interface for db operation(inbuild fun)
+service or Implementation -> business logic
+controller -> REST endpoints handle http request
+           ella request varum
+dto -> data transfer object -> short name of entity->send required data
+exception -> custom exception
+config -> swagger eluthurathuku
+security -> namma create poandra methids yaru access panvanganu eluthurathu
+ithu controller la eluthuvoem
+
+
+IoC 
+inversion of control
+
+dependencies injection
+oruthanuku onnu venumna athu dependancies atha kudukurathu injection
+
+
+
+print in sb
+package com.example.demo;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class NameController {
+
+    @GetMapping("/name")
+    public String printName() {
+        return "Jinu Krishnan";
+    }
+}
+
+http status code
+1xx series
+info response mattum tha
+100 -> continue -> receive request ,process continue
+     example google drive,one drive,
+     you cant see 100
+
+2xx series -> success response
+200-> ok -> worked perfectly
+201->created -> new resource created ->POST request create data
+202-> accepted -> request accept processing later -> Async processing -> payment req accepted but processing in background
+204-> no content -> success but no response body -> delete operation
+
+3xx series -> redirection response  http:www.amypo.com
+301 -> move permanently 
+url change permanently-> http to https -> old url to new url
+302 -> found temporary redirect -> login redirect to dashboard
+304 -> not modified
+
+4xx series-> client errors
+mistake from client side
+400 -> bad request
+invalid req data
+missing data
+age should be num if i type string
+401->unauthorized -> no log in token missing -> access without login -> login pannama url try pandraen
+403 -> login panitu access illqma irukurathu -> login no permission
+404 -> not found daily ne pakurathu
+405->postbused instead of get
+408->req time out
+409->conflict 
+413-> payload too large data
+415->unsupported media type
+
+5xx -> server errors
+problem from server side
+500-> internal server error-> server crashed
+502 ->bad gateway ->run agatha server acces pannumpothu varum
+503 -> service unavailable  -> server temp down
+504 -> gateway time out
+
+
+
+CRUD using collection -GET POST PUT DELETE
+entity
+private -> for security
+localdate->ctrl+space
+id->primary key
+getter -> return type
+setter -> no return type void
+getId-> proper format -> camel case
+for paerameter constructor we need to select
+right click -> source action->getter setter ->select all enter
+same for creating constructor
+for empty constructor -> dont select
+
+for creating entity
+getter setter
+for developer -> parameter constructor
+empty parameter 
+
+
+@component -> sb la IOC container la athoda memory store agum
+error -> map pakathula ctl space import agirum
+Map<Integer,studententity> 
+interger->key
+stide ent->datat base
+ logic inga tha work
+ req inga tha
+search mvn repository 
+ search spring doc
+2.8.13
+
+HTTP Status Codes (With Easy Memory Tricks)
+1xx – Informational Responses
+
+Used internally; users usually don’t see them.
+
+Code	Meaning
+100	Continue – request received, processing continues
+
+🧠 Example:
+
+Google Drive uploading a large file
+
+Upload continues silently
+
+
+2xx – Success Responses ✅
+Code	Meaning	Real-life example
+200	OK	Data fetched successfully
+201	Created	New user registered
+202	Accepted	Payment accepted, processing later
+204	No Content	Delete success, nothing to show
+
+
+3xx – Redirection Responses 🔁
+Code	Meaning	Example
+301	Permanent Redirect	HTTP → HTTPS
+302	Temporary Redirect	Login → Dashboard
+304	Not Modified	Cached data used
+
+
+4xx – Client Errors ❌ (User Mistake)
+Code	Meaning	Example
+400	Bad Request	Wrong input type
+401	Unauthorized	Token missing
+403	Forbidden	Logged in but no permission
+404	Not Found	Wrong URL
+405	Method Not Allowed	POST used instead of GET
+408	Request Timeout	Network issue
+409	Conflict	Duplicate data
+413	Payload Too Large	Large file
+415	Unsupported Media Type	Wrong content-type
+5xx – Server Errors 🔥 (Server Problem)
+Code	Meaning
+500	Internal Server Error
+502	Bad Gateway
+503	Service Unavailable
+504	Gateway Timeout
+
+🧠 Remember:
+
+4xx = Client mistake
+5xx = Server mistake
+
+4️⃣ CRUD Operations Using Collection
+Operation	HTTP Method
+Create	POST
+Read	GET
+Update	PUT
+Delete	DELETE
+
+
+http://localhost:8080/swagger-ui/index.html
+
+What is Map in Java?
+Definition
+
+Map is an interface in Java used to store data in key–value pairs.
+
+Key  →  Value
+
+
+Key → Unique identifier
+
+Value → Data related to the key
+
+📌 A Map does NOT allow duplicate keys, but values can be duplicated.
+
+Simple Example
+Map<Integer, String> map = new HashMap<>();
+
+map.put(1, "Jinu");
+map.put(2, "Arun");
+map.put(3, "Rahul");
+Real-Life Example (Easy to Remember)
+
+📞 Phone Contacts
+
+Name → Phone Number
+
+Each name is unique
+
+Phone numbers can repeat
+What is HashMap in Java?
+Definition
+
+HashMap is a class that implements Map interface.
+
+Map<Integer, String> map = new HashMap<>();
+
+Student Roll Number System
+
+Roll No → Student Details
+
+
+Roll number is unique
+
+Student data can be anything
+
+Map<Integer, studententity> details = new HashMap<>();
+Meaning
+Integer → Student ID (Primary Key)
+
+studententity → Full student data
+
+details → Temporary database
+
+Flow
+POST → Save student
+
+GET → Fetch all students
+
+GET by ID → Fetch single student
+
+containsKey() – Why You Used It
+if(details.containsKey(id)) {
+    return details.get(id);
+}
+
+Meaning
+
+✔ Prevents error
+✔ Ensures data exists before fetching
+
+🧠 Real-life:
+👉 Checking if your phone contact exists before calling
+
+What is Swagger?
+
+Swagger is a tool used to document, visualize, and test REST APIs without writing any client code (like Postman or frontend).
+
+👉 In simple words:
+Swagger shows all your APIs in a web page and lets you test them.
+
+integer → Key (Student ID)
+
+studententity → Value (Student Data)
+
+Methods
+
+saveData() → Insert data
+
+getStudents() → Get all students
+
+getById() → Fetch student by ID
+
+
+
+package com.example.demo.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+
+import com.example.demo.entity.studententity;
+
+@Service
+public class studentservice{
+    Map<Integer,studententity> details=new HashMap<>();
+
+    public studententity saveData(studententity st) {
+        details.put(st.getId(),st);
+        return st;
+        
+    }
+
+    public List<studententity> getStudents() {
+     return new ArrayList<>(details.values());
+    }
+
+    public studententity getById(int id) {
+       if(details.containsKey(id)){
+        return details.get(id);
+       }
+       else{
+        return null;
+       }
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+package com.example.demo.entity;
+
+import java.time.LocalDate;
+
+public class studententity {
+    private int id;
+    private String name;
+    private String email;
+    private LocalDate dob;
+    private float cgpa;
+
+ public void  setId(int id){
+  this.id=id;
+ }
+
+  public int getId(){
+  return id;
+ }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public LocalDate getDob() {
+    return dob;
+  }
+
+  public void setDob(LocalDate dob) {
+    this.dob = dob;
+  }
+
+  public float getCgpa() {
+    return cgpa;
+  }
+
+  public void setCgpa(float cgpa) {
+    this.cgpa = cgpa;
+  }
+
+  public studententity(int id, String name, String email, LocalDate dob, float cgpa) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.dob = dob;
+    this.cgpa = cgpa;
+  }
+
+  public studententity() {
+  }
+  
+
+}
+
+
+
+
+
+
+
+package com.example.demo.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.entity.studententity;
+import com.example.demo.service.studentservice;
+
+@RestController
+public class studentcontroller {
+    @Autowired
+    studentservice ser;
+    @PostMapping("/poststudent")
+    public studententity addStudent(@RequestBody studententity st)
+    {
+       return ser.saveData(st);
+
+    }
+
+    @GetMapping("/getAll")
+    public List<studententity>getAllstudents(){
+        return ser.getStudents();
+    }
+
+    @GetMapping("/get{id}")
+     public studententity getByid(@PathVariable int id){
+        return ser.getById(id);
+     }
+}

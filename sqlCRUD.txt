@@ -1,0 +1,447 @@
+com.example.sql
+│
+├── Controller
+│     └── StudentController.java
+│
+├── Entitydata
+│     └── Student.java
+│
+├── Repository
+│     └── StudentRepo.java
+│
+├── Service
+│     ├── StudentService.java
+│     └── impl
+│          └── StudentServiceImpl.java
+│
+└── resources
+      └── application.properties
+
+
+Student Entity
+Student.java
+public class Student {
+
+This class represents a database table called student.
+
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Integer id;
+
+@Id → Marks id as Primary Key
+@GeneratedValue → Auto-generates ID
+IDENTITY → MySQL controls auto-increment
+Integer → Allows null before saving
+Student Table Column: id (PRIMARY KEY, AUTO_INCREMENT)
+
+private String name;
+private String email;
+These become columns in the database table.
+
+public int getId() { return id; }
+public void setId(Integer id) { this.id = id; }
+
+Why getters & setters?
+Hibernate uses getters/setters
+Encapsulation (OOP concept)
+
+public Student(Integer id, String name, String email) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+}
+
+Parameterized constructor
+Used when manually creating objects
+
+public Student() { }
+
+Default constructor
+Mandatory for JPA
+Hibernate creates objects using this
+
+
+code
+public class Student {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String email;
+    public int getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public Student(Integer id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+    public Student() {
+    }
+
+
+--------------------------------------------------------
+
+Repository Layer  -   Database Operations
+StudentRepo.java
+@Repository
+public interface StudentRepo extends JpaRepository<Student,Integer> {
+}
+
+@Repository
+Marks this as a DAO layer
+Enables exception translation
+
+JpaRepository<Student, Integer>
+
+Part	Meaning
+Student	Entity class
+Integer	Type of primary key
+
+| Method         | Purpose         |
+| -------------- | --------------- |
+| `save()`       | Insert / Update |
+| `findAll()`    | Get all records |
+| `findById()`   | Get by ID       |
+| `existsById()` | Check existence |
+| `deleteById()` | Delete record   |
+
+
+repository
+studentrepo
+package com.example.sql.Repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.example.sql.Entitydata.Student;
+
+@Repository
+public interface StudentRepo extends JpaRepository<Student,Integer>  {
+
+ 
+}
+
+
+------------------------------------------------------------------------
+Service Interface (Business Contract)
+
+StudentService.java
+
+public interface StudentService {
+
+Defines what operations are allowed
+Student postdata(Student stu);
+
+Save student data
+
+List<Student> getdata();
+Fetch all students
+
+Student updatedata(int id,Student std);
+Update student by ID
+
+String deletedata(int id);
+Delete student
+
+code:   studentservice.java
+
+package com.example.sql.Service;
+import java.util.List;
+import com.example.sql.Entitydata.Student;
+public interface StudentService {
+    Student postdata(Student stu);
+    List<Student> getdata();
+    Student updatedata(int id,Student std);
+    String deletedata(int id);
+}
+
+---------------------------------------------------------------
+Service Implementation (Business Logic)
+StudentServiceImpl.java
+
+@Service
+public class StudentServiceImpl implements StudentService {
+
+Explanation:
+@Service → Business logic layer
+implements StudentService → Implements contract
+
+@Autowired
+StudentRepo repo;
+
+Injects repository automatically
+No new keyword needed
+Example of Dependency Injection
+
+Save Data
+
+@Override
+public Student postdata(Student stu){
+    return repo.save(stu);
+}
+
+Saves student into MySQL
+Returns saved object with generated ID
+
+Fetch All Data
+@Override
+public List<Student> getdata(){
+    return repo.findAll();
+}
+
+Fetches all rows from student table
+Update Data
+
+@Override
+public Student updatedata(int id, Student std){
+    if(repo.existsById(id)){
+        std.setId(id);
+        return repo.save(std);
+    }
+    return null;
+}
+
+Checks if record exists
+Sets ID manually
+save() updates if ID exists
+Returns null if not found
+
+save() → Insert OR Update
+
+Delete Data
+@Override
+public String deletedata(int id){
+    repo.deleteById(id);
+    return "Deleted Successfully";
+}
+
+Deletes student record by ID
+
+
+code:
+service
+
+   impl
+       studentserviceimpl
+            package com.example.sql.Service.impl;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.example.sql.Entitydata.Student;
+import com.example.sql.Repository.StudentRepo;
+import com.example.sql.Service.StudentService;
+@Service
+public class StudentServiceImpl  implements StudentService {
+//save
+//findById()
+//findAll();
+//existsById()
+//deleteById()
+@Autowired StudentRepo repo;
+@Override
+ public Student postdata(Student stu){
+   return repo.save(stu);
+ }
+ @Override
+    public List<Student> getdata(){
+     return repo.findAll();
+    }
+    @Override
+   public  Student updatedata(int id,Student std){
+     if(repo.existsById(id)){
+        std.setId(id);
+        return repo.save(std);
+     }
+     return null;
+    }
+    @Override
+   public  String deletedata(int id){
+    repo.deleteById(id);
+    return "Deleted Sucessfully";
+
+    } 
+}
+
+-----------------------------------------------------------------------
+
+Controller Layer (API Endpoints)
+StudentController.java
+
+@RestController
+public class StudentController {
+
+@RestController = @Controller + @ResponseBody
+Sends JSON response automatically
+
+controller
+studentcontroller
+
+@Autowired
+StudentService std;
+
+Injects service layer
+
+POST – Insert Data
+@PostMapping("/post")
+public Student postMethodName(@RequestBody Student stu) {
+    return std.postdata(stu);
+}
+
+Explanation:
+@PostMapping → HTTP POST
+@RequestBody → JSON → Java Object
+Calls service method
+
+
+GET – Fetch All
+@GetMapping("/get")
+public List<Student> getMethodName() {
+    return std.getdata();
+}
+Returns all students as JSON array
+
+
+PUT – Update
+@PutMapping("put/{id}")
+public Student putMethodName(@PathVariable int id, @RequestBody Student entity) {
+    return std.updatedata(id, entity);
+}
+
+Explanation:
+@PathVariable → Extracts ID from URL
+@RequestBody → Updated JSON data
+
+DELETE – Remove
+@DeleteMapping("/delete/{id}")
+public String delete(@PathVariable int id){
+    return std.deletedata(id);
+}
+Deletes record by ID
+
+
+code
+@RestController
+public class StudentController {
+    @Autowired StudentService std;
+
+
+    @PostMapping("/post")
+    public Student postMethodName(@RequestBody Student stu) {
+        return std.postdata(stu);
+    }
+    @GetMapping("/get")
+    public List<Student> getMethodName() {
+ 
+        return std.getdata();
+    }
+    @PutMapping("put/{id}")
+    public Student putMethodName(@PathVariable int id, @RequestBody Student entity) {
+        return std.updatedata(id, entity);
+
+    }
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable int id){
+        return std.deletedata(id);
+    }
+
+-------------------------------------------------
+
+application.properties (Configuration)
+application.properties
+
+Application Name    spring.application.name=sql    Project name
+
+MySQL Connection
+spring.datasource.url=jdbc:mysql://localhost:3306/sample?createDatabaseIfNotExist=true
+
+Connects to MySQL
+Auto-creates database if missing
+
+spring.datasource.username=root
+spring.datasource.password=root
+
+Database credentials
+
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+MySQL JDBC Driver
+
+Hibernate Configuration
+spring.jpa.hibernate.ddl-auto=update
+| Value      | Meaning                    |
+| ---------- | -------------------------- |
+| `update`   | Auto create/update table   |
+| `create`   | Drops & creates every time |
+| `validate` | Only checks                |
+| `none`     | No action                  |
+
+spring.jpa.show-sql=true
+Prints SQL queries in console
+
+spring.jpa.properties.hibernate.format_sql=true
+Beautifies SQL output
+
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+Tells Hibernate it’s MySQL
+
+
+application properties
+
+this is for local
+
+spring.application.name=sql
+#sql connectivity
+spring.datasource.url=jdbc:mysql://localhost:3306/sample?createDatabaseIfNotExist=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+
+#Hibernate Configration
+spring.jpa.hibernate.ddl-auto=update
+# spring.jpa.hibernate.ddl-auto=update
+
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+
+
+this is for portal
+spring.application.name=demo
+# Don't change the port
+server.port = 9001
+# for https
+server.forward-headers-strategy=framework 
+
+
+spring.datasource.url=jdbc:mysql://localhost:3306/transport_pro?createDatabaseIfNotExist=true
+
+spring.datasource.username=root
+spring.datasource.password=Amypo
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+
+------------------------------------------------------------------------------------
+
+

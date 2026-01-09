@@ -1,0 +1,45 @@
+maven installation
+maven download for windows
+download apache maven leaf logo
+binary zip archive file 3.9.11
+
+Project build pandrathukana 3rd party
+copy path and paste in ENV 
+     MAVEN_HOME
+just set in system variable
+
+after this
+click bin
+copy path
+
+system variable -> path -> new -> paste the path ->ok
+
+install agiruka check pandroem
+search -> cmd -> mvn -v
+
+for execute in sb
+maven ngrathu executer
+mvn clean -> remove dependicies
+mvn install
+mvn spring-boot:run  overall sb application execute
+
+dependicies -> libraray ->in our project we use just we call method name
+
+pom.xml
+dependencies -> add libraries
+
+mvnw already install
+terminal
+cd 
+mvn -v
+mvn install -> already  irukura dependencies install agum
+for delete version mvn clean
+mvn spring-boot:run workflow server link show agum install panni execute agum
+
+
+
+
+
+
+
+

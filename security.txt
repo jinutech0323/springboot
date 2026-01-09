@@ -1,0 +1,38 @@
+security
+decrypt
+ dependency -> spring boot starter security 
+ 
+Bcrypt password
+application properties
+security.user.name
+security.user.password
+
+$2a$10$H0db0zNQZylper3WTuwCFetgDjF9j4TBnN2XPK/ymY3/kOrhYjiEK
+
+$2a$ → Algorithm identifier
+2a means bcrypt algorithm (version 2a)
+Tells the system which hashing algorithm was used
+There are also variants like 2b, 2y
+
+$10$ → Cost factor (strength)
+10 means 2¹⁰ = 1024 rounds
+Higher number = slower but more secure
+Common values: 10–12
+This makes brute-force attacks difficult
+
+H0db0zNQZylper3WTuwCFe → Salt
+Random value added to password before hashing
+Prevents:
+Rainbow table attacks
+Same password → same hash problem
+Every user gets a unique salt
+
+tgDjF9j4TBnN2XPK/ymY3/kOrhYjiEK → Hashed password
+Final encrypted result
+Generated using:
+bcrypt(password + salt, cost)
+
+
+
+spring
+jwt token generate,auth

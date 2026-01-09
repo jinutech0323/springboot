@@ -1,0 +1,263 @@
+What is an Exception?
+An exception is a runtime error that occurs while the application is running and interrupts normal execution.
+Examples:
+Data not found in database
+Invalid URL request
+Null pointer access
+Divide by zero
+Database connection failure
+
+What is an Exception?
+Simple definition:
+Exception = an unexpected problem that happens while the program is running
+
+Real-life example:
+You go to an ATM
+You ask for ₹5000
+ATM has ₹0
+Problem occurred → this is an exception
+
+public Student getStudent(Long id) {
+    return repo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Student not found"));
+}
+
+
+In Java:
+An exception is an object that is created when something goes wrong.
+---------------------------------------------------------------------------
+What is a Custom Exception?
+Custom exception = exception created by YOU
+
+
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String message) {
+        super(message);
+    }
+}
+
+Meaningful error name
+Easy to understand
+Easy to handle globally
+
+---------------------------------------------------------------------------------
+
+What is Global Exception Handling?
+Global Exception = handling all exceptions at ONE place for the entire application
+
+What is @ControllerAdvice?
+@ControllerAdvice
+public class GlobalExceptionHandler {
+}
+
+@ControllerAdvice = watchman
+Watches all controllers
+Catches exceptions thrown anywhere
+
+
+Service throws exception
+        ↓
+Controller does nothing
+        ↓
+@ControllerAdvice catches it
+        ↓
+Proper HTTP response sent
+--------------------------------------------------------------------------------
+
+What is Validation?
+Validation = checking whether input data is correct before processing it
+Example:
+Name must not be empty
+Email must be valid
+Age must be greater than 18
+
+Without validation:
+Empty data saved to DB
+Wrong email formats stored
+Application crashes
+Bad user experience
+
+With validation:
+Clean data
+Fewer bugs
+Secure application
+Professional APIs
+
+dependency:
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+
+
+validate annotation
+| Annotation      | Purpose           |
+| --------------- | ----------------- |
+| @NotNull     | Cannot be null    |
+| @NotBlank    | Cannot be empty   |
+| @Size      | Length validation |
+| @Min / @Max | Number range      |
+| @Email        | Email format      |
+| @Pattern      | Regex validation  |
+-------------------------------------------------------------------------------
+
+| Validation           | Exception                |
+| -------------------- | ------------------------ |
+| Checks input data    | Handles runtime problems |
+| Happens before logic | Happens during execution |
+| Prevents bad data    | Handles errors           |
+| User input related   | System related           |
+
+@NotBlank(message = "Name cannot be empty")
+private String name;
+
+@Email(message = "Invalid email")
+private String email;
+
+@NotBlank on Name
+@NotBlank(message = "Name cannot be empty")
+Validation annotation
+Ensures:
+Not null
+Not empty ""
+Not only spaces " "
+If invalid → Validation Exception thrown
+
+@NotBlank on Email
+@NotBlank(message = "Email cannot be empty")
+Email must be provided
+Cannot be null or empty
+
+@Email
+@Email(message = "Invalid email format")
+Checks email format
+Example:
+Valid: abc@gmail.com
+Invalid: abc@com
+
+What validation does:
+Checks name is empty?
+Checks email format wrong?
+Result:
+Request rejected before saving
+
+Validation → Checks input data
+{
+  "name": "Name cannot be empty",
+  "email": "Invalid email"
+}
+Bad data never reaches database
+
+
+Exception → Handles runtime problems
+{
+  "name": "Jinu",
+  "email": "jinu@gmail.com"
+}
+
+But user tries:and student does not exist
+
+repo.findById(id)
+  .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+
+
+Database searched
+No record found
+Exception thrown at runtime
+
+{
+  "error": "Student not found"
+}
+This is NOT input error, this is data missing problem
+
+--------------------------------------------------------------------------------------------
+UNIQUE in Spring Boot Entity
+UNIQUE means a value must NOT be repeated.
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(unique = true)
+    private String email;
+}
+Database will not allow duplicate emails
+Insert same email twice → error
+
+| Field          | Can repeat? | Why                     |
+| -------------- | ----------- | ----------------------- |
+| Aadhaar number | ❌ No        | One person → one number |
+| Email ID       | ❌ No        | One email → one user    |
+| Roll number    | ❌ No        | One student → one roll  |
+| Phone number   | ❌ No        | Identifies one user     |
+
+@ExceptionHandler(DataIntegrityViolationException.class)
+public ResponseEntity<String> handleDuplicate(DataIntegrityViolationException ex) {
+    return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+}
+
+------------------------------------------------------------------------------------------------
+What is Timestamp?
+Timestamp = date + time recorded for an event
+
+timestamp = date + time
+Tracks events
+Used in DB & APIs
+Important for auditing
+
+| Event                 | Timestamp           |
+| --------------------- | ------------------- |
+| WhatsApp message sent | 18-12-2025 09:45:30 |
+| ATM withdrawal        | 19-12-2025 11:02:10 |
+| Email received        | 19-12-2025 06:30:55 |
+| Account created       | 20-12-2025 14:10:00 |
+
+@Entity
+public class Student {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String name;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+}
+
+| Annotation           | Purpose                              |
+| -------------------- | ------------------------------------ |
+| @CreationTimestamp | Saves time when record is created    |
+| @UpdateTimestamp   | Updates time whenever record changes |
+
+Create student:
+{
+  "name": "Jinu"
+}
+Stored in DB:
+created_at → 2025-12-19 06:40:00
+updated_at → null
+
+Update student:
+{
+  "name": "Jinu Krishnan"
+}
+DB becomes:
+created_at → 2025-12-19 06:40:00
+updated_at → 2025-12-19 07:10:12
+
+Timestamp in API Response
+{
+  "id": 1,
+  "name": "Jinu",
+  "createdAt": "2025-12-19T06:40:00",
+  "updatedAt": "2025-12-19T07:10:12"
+}
+--------------------------------------------------------------------------------
+
+
+
+
+

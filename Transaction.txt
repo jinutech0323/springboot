@@ -1,0 +1,347 @@
+What is Database Transaction?
+
+Transaction na,
+Multiple database operations combine pannitu single task-aa treat pannradhu.
+
+Realistic Example – GPay / PhonePe 
+
+Account A la irundhu ₹100 debit
+
+Account B ku ₹100 credit
+
+Idhu 2 DB operations, but oru transaction.
+
+Rendum success → COMMIT
+
+Edhavadhu fail (server down, network issue) → ROLLBACK (money refund)
+-----------------------------------------------------------------------------------------
+Commit & Rollback
+Commit
+
+Ellaa operations success aana
+
+Data permanently DB-la save aagum
+
+Rollback
+
+Oru operation kooda fail aana
+
+Ellaa changes undo aagum
+
+“All or Nothing” concept
+--------------------------------------------------------------------------------------
+Transaction Service Layer-la yen?
+
+Spring Boot-la:
+
+Controller → request handle
+
+Service → business logic
+
+Repository → DB interaction
+
+Transaction always Service layer-la irukkanum
+Because:
+
+Business logic-la than multiple DB calls irukkum
+
+@Transactional Annotation
+
+@Transactional
+public void transferAmount() {
+    debitFromAccountA();
+    creditToAccountB();
+}
+-----------------------------------------------------------------------------------
+What @Transactional does?
+
+Success → commit
+Exception / failure → rollback
+
+Nee manual-aa check panna vendam
+Spring automatic-aa handle pannum
+
+When should we use @Transactional?
+
+Oru function-kulla multiple DB operations irundha
+Oru step fail aana ellam undo aaganum na
+Banking, payment, booking, order placement
+------------------------------------------------------------------------------------------
+ACID Properties (Very Important)
+
+Transaction safe-aa work aaganum na ACID follow pannum.
+
+🅰 Atomicity – All or Nothing
+
+Example – GPay
+
+Debit success
+
+Credit fail
+
+Full transaction cancel
+Debit kooda undo (rollback)
+
+Oru function-kulla irukkura ella steps success aaganum, illa na onnum nadakka koodadhu.
+
+🅲 Consistency – Valid Data Only
+
+Example – Student Registration
+
+Email already exists 
+
+Dept invalid 
+
+Validation fail aana
+Data save aagadhu
+
+DB-la irukkura rules, relationship, constraints ellam satisfy aaganum.
+
+🅸 Isolation – One Transaction should not affect another
+
+Example – Movie Ticket / Train Seat Booking 
+
+Seat 10 ku
+User A book panra
+User B same time try panra
+
+First complete panna person ku seat
+Second transaction cancel + refund
+
+Oru transaction nadakkum pothu, innoru transaction disturb panna koodadhu.
+
+🅳 Durability – Once committed, always saved
+
+Example – GPay Payment
+
+Payment success message varudhu
+
+Phone sudden-aa switch off
+
+Amount already transfer aagirukum
+Server restart, crash, power failure – no problem
+
+Commit aagiduchina data never lost.
+---------------------------------------------------------------------------------------
+HQL – Hibernate Query Language
+What is HQL?
+
+SQL madhiri
+
+Table name use panna maattom
+
+Entity class name use pannuvom
+
+Column name illa → variable name
+---------------------------------------------------------
+| SQL                    | HQL                      |
+| ---------------------- | ------------------------ |
+| SELECT * FROM students | FROM Student             |
+| Table name             | Entity name              |
+| Column name            | Variable name            |
+| Manual SQL             | Hibernate convert to SQL |
+----------------------------------------------------------------------------------
+@Query("FROM Student")
+List<Student> getAllStudents();
+
+@Query("FROM Student")
+List<Student> getAllStudents();
+
+s = alias name
+@Param = query-la use panna variable map pannradhuku
+---------------------------------------------------------------------------
+filter and sorting
+@Query("FROM Student s WHERE s.cgpa > :cgpa AND s.dept = :dept")
+List<Student> findByCgpaAndDept(
+    @Param("cgpa") float cgpa,
+    @Param("dept") String dept
+);
+
+@Param illama irundha Spring-ku theriyadhu
+Method parameter → query variable mapping
+
+-----------------------------------------------------------------------
+
+Update / Delete Query Special Rule 
+
+HQL-la update / delete use pannina:
+
+@Modifying
+@Transactional
+@Query("UPDATE Student s SET s.cgpa = :cgpa WHERE s.id = :id")
+int updateCgpa(@Param("cgpa") float cgpa, @Param("id") int id);
+
+
+@Modifying – data change query nu sollradhu
+@Transactional – commit / rollback handle pannum
+
+------------------------------------------------------------------------------
+HCQL – Hibernate Criteria Query Language
+HCQL na enna?
+
+Java object-aa use panni query write pannradhu
+
+String query illa
+
+Type-safe
+
+Mostly Hibernate specific
+Vendor lock-in problem
+
+JPQL – Java Persistence Query Language
+
+HQL-oda updated version
+
+JPA standard
+
+Hibernate, EclipseLink ellam support pannum
+
+Recommended for real projects
+
+Controller → Service → Repository Flow (Real Example)
+Controller
+@GetMapping("/{name}")
+public List<Student> getAllByName(@PathVariable String name) {
+    return studentService.getAllName(name);
+}
+
+Service
+public List<Student> getAllName(String name) {
+    return studentRepository.findAllByName(name);
+}
+
+Repository
+@Query("FROM Student s WHERE s.name = :name")
+List<Student> findAllByName(@Param("name") String name);
+
+
+Clean separation
+Easy testing
+Industry standard
+
+
+-----------------------------------------------------------------------------
+
+handling database transaction
+how we control data in database
+
+transaction oda two types ->multiple db combine single task
+commit ->entire success
+rollback->undo
+example transact amount in gpay if cancelled due to server issue it will refund that is rollback
+
+transaction->happens in service layer -> @transactional annotation
+handle success failure nu kandupidikum
+
+oru function athula 2nd operation nadakum apo transactional annotation use panva
+
+ACID properties handle pandrathuku use panvoem
+A ->atomicity -> all or nothing ->gpay->based on operation ->orae func kulla multiple opera if one not satisfied al will be not be executed it will work on step weather all steps is working or not
+
+C->consistency -> if all pass it will save if not nothing will be saved based on relationship validation check pannum -> data thappa iruthuna data crcta iruka illaya pakum 
+
+I->isolation -> seat booking ->transaction should not interfere with another transaction if i am booking at that time another per booking at that who goes forst for them it will okay if not remaining will be cancelled and refund but for both amount will debited
+
+D->durability->particular process commit agiduchina satistf mobile paying in gpay once you paid suddenly your phone switch off then the process is complete that is durability server stop analum work agum  server crashes, power fails, application restarts
+
+
+fallbackfor attribute.class
+
+
+
+
+
+
+HQL hibernate query language
+instead of table name  we will use class name
+instead of column name we will use variable name
+
+
+HCQL hibernate criteria query language
+particular query we can use
+only hiberbate related orm we can use
+
+vendor lockin
+
+
+updated version JPQL java persistence query language
+whatever query we can use
+
+sql
+SELECT la irunthu start agum
+manually
+hql
+FROM la irunthu start agum
+automatically hql to sql convert agum using hibernate
+
+HQL in repository
+@Query("FROM entityname")
+List<entityname> getAllStudents();
+@Query("FROM entityname s WHERE s.email= :email")
+ s->alias name
+entityname findByEmail(@Param
+"email") String email);
+
+
+
+HQL and JPQL pakurathuku same but the process different
+
+
+hql
+strings
+filtersorting
+Query ->just create own queries
+
+
+@Query("FROM Student s.where s.cgpa > :cgpa AND s.dept(variable name)=:dept")
+List<Student. findBycgpaand dept(@Param ("cgpa:) float cgpa,(@param("dept
+) String dept)
+
+@Param -> variable name declaraing fun la pass poaniryukenu enaku han thorium but athuku theriyathu
+
+
+when we write update query
+delete
+update
+
+we need to write @Modifying
+@Transactional
+
+ 
+
+
+hcql
+java object code we are going to wrote
+
+hcql hql differ
+hql filter ku mattum-> multiple query eluthanum
+
+
+controller
+// @GetMapping("/{name}")
+    // public List<Student> getAllByName(@PathVariable String name){
+    //     return studentService.getAllName(name);
+    // }
+
+
+
+repository
+// @Query("FROM Student s where s.name = :name")
+    // List<Student> findAllByName(@Param("name") String name);
+
+    //another example not implemented
+    //@Query("FROM Student s where s.cgpa > :cgpa AND s.dept = :dept") 
+    //List<Student> findByCgpaAndDept(@Param("cgpa") float cgpa, @Param("dept") String dept) 
+
+service
+    // List<Student> getAllName(String name);
+
+service implementation
+ // public List<Student> getAllName(String name){
+    //     return studentRepository.findAllByName(name);
+    // }
+
+
+
+
+just what i understand i just kept in tunglish just make  me proper explanation with realistic example
